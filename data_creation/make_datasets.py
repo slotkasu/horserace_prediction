@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 import csv
 from keiba_function import getRaceNum, getSexNum, getShibadaNum, getStateNum, getRaceResult, TtoF, getFuku
 
-def makeKeibaDataset(date, train_mode=0, driver=None):
+def makeKeibaDataset(date, train_mode=1, driver=None):
 	try:
 		os.makedirs("datasets/"+date[0:4],exist_ok=False)
 	except:

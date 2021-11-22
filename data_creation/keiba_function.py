@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import time
+import re
 
 #レース名を引数に番号を返す
 def getRaceNum(raceName):
@@ -110,7 +111,7 @@ def getFuku(date,driver):
 		options = Options()
 
 		# Headlessモードを有効にする（コメントアウトするとブラウザが実際に立ち上がります）
-		# options.set_headless(True)
+		options.set_headless(True)
 		options.add_argument("--log-level=3")
 		driver = webdriver.Chrome(chrome_options=options)
 
@@ -191,10 +192,5 @@ def makeRaceName(date):
 
 	user = (int(date),title)
 	
-	try:
-		c.execute(sql,user)
-		dbname.commit()
-	except:
-		print(date, title, "ERROR : already exists.")
 
 	return 0

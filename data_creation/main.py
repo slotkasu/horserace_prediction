@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import datetime
 from datetime import timedelta
-from class_fetch import makeKeibaDataset
+from make_datasets import makeKeibaDataset
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from keiba_function import makeRaceName
@@ -27,7 +27,7 @@ options.add_argument("--log-level=3")
 
 driver = webdriver.Chrome(chrome_options=options)
 
-years=['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020']
+years=['2021']
 for year in years:
 
 	#この番号からはじめる　8桁
@@ -43,9 +43,9 @@ for year in years:
 						continue
 					else:
 						# original
-						# kekka = makeKeibaDataset(year+course+kaisai+date+race,driver=driver)
+						kekka = makeKeibaDataset(year+course+kaisai+date+race,driver=driver)
 						#レース名取得
-						kekka = makeRaceName(year+course+kaisai+date+race)
-						if kekka == 3:
-							break
+						# kekka = makeRaceName(year+course+kaisai+date+race)
+						# if kekka == 3:
+						# 	break
 		

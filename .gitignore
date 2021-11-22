@@ -131,3 +131,4 @@ dmypy.json
 # watanabe
 settings.json
 *.csv
+badlist.txt
