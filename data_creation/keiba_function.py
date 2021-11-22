@@ -111,7 +111,9 @@ def getFuku(date,driver):
 		options = Options()
 
 		# Headlessモードを有効にする（コメントアウトするとブラウザが実際に立ち上がります）
-		options.set_headless(True)
+		# selenium 3.141.0 required
+		options.headless = True
+		# options.set_headless(True)
 		options.add_argument("--log-level=3")
 		driver = webdriver.Chrome(chrome_options=options)
 

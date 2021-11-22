@@ -1,3 +1,4 @@
+from typing import Awaitable
 import requests
 import os
 import re
@@ -98,7 +99,6 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 		temp = horseList.find("span", class_="Barei").get_text().strip()
 		sei, rei = getSexNum(temp[:1]),temp[1:2]
 		temp_info_list = temp_info_list + sei
-		
 		temp_info_list.append(rei)
 
 		#斤量
@@ -282,6 +282,9 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 	RaceResult=[i for i in RaceResult if not "中止" in i]
 
 	for i in range(5):
+		pass_order = ["通過順"+str(i+1)+"_1","通過順"+str(i+1)+"_2","通過順"+str(i+1)+"_3","通過順"+str(i+1)+"_4"]
+		del temp_past[-8:-4]
+		temp_past[-4:-4] = pass_order
 		temp_horse.extend(temp_past)
 
 	RaceResult.insert(0,temp_horse)

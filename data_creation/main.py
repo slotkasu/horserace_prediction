@@ -22,7 +22,7 @@ race_list = [str(i+1).zfill(2) for i in range(12)]
 options = Options()
 
 # Headlessモードを有効にする（コメントアウトするとブラウザが実際に立ち上がります）
-options.set_headless(True)
+options.headless = True
 options.add_argument("--log-level=3")
 
 driver = webdriver.Chrome(chrome_options=options)
