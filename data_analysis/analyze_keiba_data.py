@@ -11,7 +11,7 @@ import glob
 #
 #
 
-datasets_dir="datasets_past/"
+datasets_dir="../datasets_past/"
 
 files = glob.glob(datasets_dir+"*.csv",recursive=True)
 print(files)
