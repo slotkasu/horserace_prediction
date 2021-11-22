@@ -1,10 +1,20 @@
 import requests
+import os
 import re
 from bs4 import BeautifulSoup
 import csv
 from keiba_function import getRaceNum, getSexNum, getShibadaNum, getStateNum, getRaceResult, TtoF, getFuku
 
 def makeKeibaDataset(date, train_mode=1, driver=None):
+	try:
+		os.makedirs("../datasets",exist_ok=False)
+	except:
+		pass
+	try:
+		os.makedirs('../datasets3/'+date[0:4],exist_ok=False)
+	except:
+		pass
+
 	url = "https://race.netkeiba.com/race/shutuba_past.html?race_id="+date+"&rf=shutuba_submenu"
 
 	html = requests.get(url)
@@ -41,8 +51,6 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 	# #馬場状態
 	temp = baseinfo.find("span", class_ = re.compile(r'Item\d+'))
 	TodaysInfo= TodaysInfo + getStateNum(temp.text[-1:])
-	
-	#######
 
 	for horseList in horseLists:
 		temp_info_list = []
@@ -263,11 +271,10 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 			i[0:0]=TodaysInfo
 			#複勝オッズを挿入
 			i[0:0]=FukuOdds[idx]
-		file_name='keiba/datasets/'+date+'test.csv'
+		file_name='../datasets/'+date+'test.csv'
 	else:
 		
 		for i in range(len(RaceResult)):
-			
 			#最新の複勝オッズ
 			RaceResult[i].extend(FukuOdds[i])
 			#当日データ
@@ -275,7 +282,7 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 			#各馬の情報
 			RaceResult[i].extend(Horseinfo[i])
 		#訓練データとして保存
-		file_name='keiba/datasets3/'+date[0:4]+"/"+date+'.csv'
+		file_name='../datasets3/'+date[0:4]+"/"+date+'.csv'
 	#csv書き込み
 	RaceResult=[i for i in RaceResult if not "中止" in i]
 
@@ -316,6 +323,7 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 		temp_list.append(row)
 	RaceResult=temp_list
 	writer.writerows(RaceResult)
+	f.close()
 	#print("書き込み完了。お疲れさまでした（朧）")
 	return title
 
