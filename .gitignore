@@ -130,3 +130,4 @@ dmypy.json
 
 # watanabe
 settings.json
+*.csv

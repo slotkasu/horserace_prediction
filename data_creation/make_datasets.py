@@ -5,13 +5,13 @@ from bs4 import BeautifulSoup
 import csv
 from keiba_function import getRaceNum, getSexNum, getShibadaNum, getStateNum, getRaceResult, TtoF, getFuku
 
-def makeKeibaDataset(date, train_mode=1, driver=None):
+def makeKeibaDataset(date, train_mode=0, driver=None):
 	try:
-		os.makedirs("../datasets",exist_ok=False)
+		os.makedirs("datasets/"+date[0:4],exist_ok=False)
 	except:
 		pass
 	try:
-		os.makedirs('../datasets3/'+date[0:4],exist_ok=False)
+		os.makedirs('datasets_past/'+date[0:4],exist_ok=False)
 	except:
 		pass
 
@@ -239,7 +239,6 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 				data07_past_text=past.find("div",class_="Data07").text
 				#着差
 				temp_past_list.append(re.findall(r'\((.*)\)',data07_past_text)[0])
-
 		#現在と過去の情報を結合させる。
 		Horseinfo.append(temp_info_list+temp_past_list)
 
@@ -249,7 +248,6 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 	file_name=""
 
 	#複勝オッズを取得
-
 	FukuOdds=getFuku(date,driver)
 	#エラー処理
 	if FukuOdds == 0:
@@ -260,20 +258,17 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 	if len(RaceResult) == 0 or train_mode == 0:
 		
 		RaceResult = Horseinfo
-
 		#テンプレートから三つ目までを削除
 		del temp_horse[:3]
 
-		
 		#レースの基本情報だけ入れる
 		for idx,i in enumerate(RaceResult):
 			#リストの先頭に当日情報を挿入
 			i[0:0]=TodaysInfo
 			#複勝オッズを挿入
 			i[0:0]=FukuOdds[idx]
-		file_name='../datasets/'+date+'test.csv'
+		file_name='datasets/'+date[0:4]+"/"+date+'test.csv'
 	else:
-		
 		for i in range(len(RaceResult)):
 			#最新の複勝オッズ
 			RaceResult[i].extend(FukuOdds[i])
@@ -282,7 +277,7 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 			#各馬の情報
 			RaceResult[i].extend(Horseinfo[i])
 		#訓練データとして保存
-		file_name='../datasets3/'+date[0:4]+"/"+date+'.csv'
+		file_name='datasets_past/'+date[0:4]+"/"+date+'.csv'
 	#csv書き込み
 	RaceResult=[i for i in RaceResult if not "中止" in i]
 
@@ -298,33 +293,9 @@ def makeKeibaDataset(date, train_mode=1, driver=None):
 	if len(RaceResult[1])-train_mode*3 != 174:
 		print("not 177")
 	
-	
-	#重要部分のみ抜き取る処理
-	temp_list=[]
-	important=[2,7,8,9,10,11,16,27,31,36,37,39,40,41,42,44,45,46,47,58,62,67,68,71,72,75,76,77,78,89,93,98,99,102,103,106,107,108,109,120,124,130,133,137,138,139,140,151,155,161,168,169,170,171]
-	for row in RaceResult:
-		#trainのとき
-		if len(row) == 177:
-			#ラベル部分　オッズとか
-			row_pre=row[:5]
-			#それ以外
-			row_past=row[5:]
-
-		#testのとき
-		elif len(row) == 174:
-			#ラベル部分　オッズとか
-			row_pre=row[:3]
-			#それ以外
-			row_past=row[3:]
-
-		#ランダムフォレストのやつでええ感じと判断された特徴量たち
-		row_past = [i for idx, i in enumerate(row_past) if idx in important]
-		row=row_pre+row_past
-		temp_list.append(row)
-	RaceResult=temp_list
 	writer.writerows(RaceResult)
 	f.close()
 	#print("書き込み完了。お疲れさまでした（朧）")
 	return title
 
-makeKeibaDataset("201810010510")
+makeKeibaDataset("201810010510",train_mode=1)
