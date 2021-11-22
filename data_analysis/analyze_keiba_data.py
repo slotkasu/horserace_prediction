@@ -1,3 +1,5 @@
+
+
 import pandas as pd
 import numpy as np
 import requests
@@ -14,5 +16,6 @@ import glob
 datasets_dir="./datasets_past/"
 
 files = glob.glob(datasets_dir+"/*/*.csv",recursive=True)
-print(files)
-# df=pd.read_csv()
+df=pd.read_csv(files[2],encoding="shift-jis")
+
+print(df.values)
