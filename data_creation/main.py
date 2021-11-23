@@ -1,10 +1,7 @@
-from bs4 import BeautifulSoup
 import datetime
-from datetime import timedelta
 from make_datasets import makeKeibaDataset
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from keiba_function import makeRaceName
 
 year = '2020'
 
